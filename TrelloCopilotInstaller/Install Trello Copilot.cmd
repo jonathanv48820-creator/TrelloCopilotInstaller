@@ -1,5 +1,5 @@
 @echo off
-title Greenwood Trello Copilot Setup
+title Trello Copilot Setup
 
 cd /d "%~dp0"
 
