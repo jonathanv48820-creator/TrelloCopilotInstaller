@@ -1,317 +1,129 @@
-# TrelloCopilotInstaller
-
 # Trello Copilot
 
-Trello Copilot is a GitHub Copilot Agent Plugin that allows administrators to manage Trello-based production orders using natural language using github copilot inside vscode.
+Trello Copilot is a Node.js application that connects GitHub Copilot with Trello through the Trello REST API, allowing administrators to manage production orders using natural language.
 
-Instead of opening Trello or learning MCP tool names, admins can ask GitHub Copilot questions such as:
+The project is designed to simplify order tracking, reporting, and board management without requiring users to navigate Trello manually.
 
-- "Find order 3264623"
-- "Move 3264623 to PROGRAMMING"
-- "Show archived orders on Trigard Memorials"
-- "Give me today's production report"
+## Features
 
-The plugin communicates with Trello through a dedicated integration account and exposes 27 MCP tools through a standalone Windows executable.
+### Order Management
 
----
-
-# Features
-
-## Order Management
-
-- Create orders
-- Find orders
+- Find orders by number
+- Create new orders
 - Move orders between lists
 - Rename orders
-- Archive orders
-- Restore archived orders
-- List orders on boards
-- List archived orders
-- View completed orders by date
+- Archive and restore orders
+- View active and archived orders
 
-## Reporting
+### Reporting
 
-- Daily Production Report
-- Due Today reporting
-- Overdue order reporting
-- RUSH order reporting
-- Archived/completed order reporting
-- Production consistency validation
+- Daily production reports
+- Due today reports
+- Overdue order reports
+- RUSH order tracking
+- Completed order tracking
+- Board activity summaries
 
-## Trello Card Management
+### Card Management
 
 - View card details
-- Read descriptions
 - Update descriptions
 - Add comments
-- Read comments
 - Manage labels
 - Manage due dates
 - View attachments
 - Read and update custom fields
 
----
+## Technology Stack
 
-# Architecture
-
-```text
-GitHub Copilot App
-        │
-        ▼
-Private Plugin Marketplace
-        │
-        ▼
-trello-orders Plugin
-        │
-        ▼
-trello-orders.exe
-        │
-        ▼
-27 MCP Tools
-        │
-        ▼
-Dedicated Trello Integration Account
-        │
-        ▼
-Trello REST API
-```
-
----
-
-# Technology Stack
-
-- GitHub Copilot Agent Plugins
-- MCP (Model Context Protocol)
 - Node.js
+- GitHub Copilot
 - Trello REST API
-- ESBuild
-- Node Single Executable Applications (SEA)
-- Git LFS
+- JavaScript (ES Modules)
 
----
-
-# Project Structure
+## How It Works
 
 ```text
-trellocopilot-plugin
-│
-├── .github/
-│   └── plugin/
-│       └── marketplace.json
-│
-├── plugins/
-│   └── trello-orders/
-│       ├── plugin.json
-│       ├── mcp.json
-│       ├── trello-orders.exe
-│       ├── server.mjs
-│       ├── trello-api.mjs
-│       ├── package.json
-│       ├── sea-config.json
-│       │
-│       ├── com.github.copilot/
-│       │   └── agents/
-│       │       └── trello-orders.agent.md
-│       │
-│       └── tools/
-│           ├── orders.mjs
-│           ├── cards.mjs
-│           ├── comments.mjs
-│           ├── labels.mjs
-│           ├── dates.mjs
-│           ├── attachments.mjs
-│           └── customfields.mjs
+GitHub Copilot
+      ↓
+Trello Copilot
+      ↓
+Trello REST API
+      ↓
+Trello Boards
 ```
 
----
+## Example Commands
 
-# Security
-
-The plugin was designed with security in mind.
-
-## Trello Authentication
-
-Credentials are never stored in source code.
-
-Required environment variables:
-
-```text
-TRELLO_API_KEY
-TRELLO_TOKEN
-```
-
-These values are stored on authorized administrator workstations and are not included in GitHub.
-
-## Integration Account
-
-A dedicated Trello integration account is used instead of personal administrator accounts.
-
-## Source Control Exclusions
-
-The following items are excluded from Git:
-
-```text
-.env
-node_modules
-build output
-archive-history.json
-```
-
-## Safety Controls
-
-Permanent card deletion is intentionally not exposed.
-
-The recommended workflow is:
-
-```text
-Archive
-↓
-Restore if needed
-```
-
----
-
-# Daily Production Report
-
-The Daily Production Report provides:
-
-- Active order counts
-- Order counts by list
-- Orders due today
-- Overdue orders
-- RUSH orders
-- Hidden active cards inside archived lists
-- Orders completed today
-
-The report includes internal validation checks to ensure totals remain consistent.
-
----
-
-# Supported Natural Language Requests
-
-## Orders
+### Orders
 
 ```text
 Find order 3264623
-Move 3264623 to PROGRAMMING
-Create order 3265000 for Desert Lawn in NEW ORDERS
-Rename 3264623 to Nelson Scroll / White Haven
+Move order 3264623 to PROGRAMMING
 Archive order 3264623
-Restore 3264623 to PROGRAMMING
+Restore order 3264623
 ```
 
-## Reporting
+### Reports
 
 ```text
-Show archived orders on Trigard Memorials
-Show completed orders from September 21, 2026
 Give me today's production report
 Show overdue orders
-Show RUSH orders
+Show archived orders
 ```
 
-## Comments
+### Card Updates
 
 ```text
-Show comments on 3264623
-Add a comment to 3264623 saying programming is finished
+Add comment to 3264623: Programming complete
+Add RUSH label to 3264623
+Set due date for tomorrow at 4 PM
 ```
 
-## Labels
+## Configuration
 
-```text
-Add RUSH to 3264623
-Remove RUSH from 3264623
-What labels are on 3264623?
+Create a `.env` file:
+
+```env
+TRELLO_API_KEY=your_api_key
+TRELLO_TOKEN=your_token
 ```
 
-## Due Dates
+## Installation
 
-```text
-When is 3264623 due?
-Set 3264623 due September 25 at 4 PM Arizona time
-Mark 3264623 due date complete
-Clear the due date on 3264623
-```
-
-## Custom Fields
-
-```text
-Show custom fields available for 3264623
-Show custom field values for 3264623
-Set the Priority custom field on 3264623 to High
-```
-
----
-
-# MCP Tool Catalog
-
-The plugin currently exposes:
-
-| Category | Count |
-|-----------|---------|
-| Orders | 11 |
-| Cards | 3 |
-| Comments | 2 |
-| Labels | 3 |
-| Dates | 4 |
-| Attachments | 1 |
-| Custom Fields | 3 |
-
-**Total: 27 MCP Tools**
-
----
-
-# Build Process
+Clone the repository:
 
 ```bash
-npx esbuild server.mjs \
-  --bundle \
-  --platform=node \
-  --format=esm \
-  --outfile=build/trello-orders-bundle.mjs
+git clone https://github.com/jonathanv48820-creator/TrelloCopilotInstaller.git
+cd TrelloCopilotInstaller
 ```
 
-Build SEA executable:
+Install dependencies:
 
 ```bash
-node --build-sea sea-config.json
+npm install
 ```
 
-Release workflow:
+Start the application:
 
-1. Update source code
-2. Build bundle
-3. Build executable
-4. Test executable
-5. Update plugin version
-6. Commit changes
-7. Push to GitHub
+```bash
+npm start
+```
 
-Git LFS manages the large executable binary.
+## Security
 
----
+- Do not commit API keys.
+- Keep `.env` files out of source control.
+- Use a dedicated Trello integration account when possible.
 
-# Deployment Status
+## Roadmap
 
-✅ Private GitHub Copilot Marketplace
+- [ ] AI-assisted production analysis
+- [ ] Automated reporting
+- [ ] Trello board insights
+- [ ] SharePoint integration
+- [ ] Microsoft Teams notifications
 
-✅ Standalone Windows executable
+## License
 
-✅ Dedicated Trello integration account
-
-✅ Git LFS support
-
-✅ Daily production reporting
-
-✅ Order archive history tracking
-
-✅ Natural language order management
-
----
-
-# License
-
-Private internal-use project.
-
-All rights reserved.
+Private project.
